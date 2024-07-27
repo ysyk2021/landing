@@ -49,7 +49,7 @@ gulp.task('fileinclude', function() {
       prefix: '@@',
       basepath: '@file'
     }))
-    .pipe(formatHtml())
+    //.pipe(formatHtml())
     .pipe( touch() )
     .pipe(gulp.dest('./'));
 });
@@ -145,14 +145,14 @@ async function screenshots(dirs = []) {
 		
 		//await page.setContent(html, {"waitUntil":"networkidle0"});
 
-		url = "http://127.0.0.1:8008" + sectionScreenshot.replace(baseDir, '');
+		url = "http://localhost:8008" + sectionScreenshot.replace(baseDir, '');
 		/*	
 		await Promise.all([ page.goto(url, { waitUntil: "load", timeout: 10000 }).catch(e => {
 		  if (e.message.includes('net::ERR_ABORTED')) { console.log('PAGE LOG:', e.message) }
 		}), page.waitForNavigation() ]);
 		*/ 
 		
-		await page.goto(url, { waitUntil: "load", timeout: 10000 }).catch(e => {
+		await page.goto(url, { waitUntil: "load", timeout: 1000000 }).catch(e => {
 		  console.log('PAGE LOG:', e.message);
 		  //if (e.message.includes('net::ERR_ABORTED')) { console.log('PAGE LOG:', e.message) }
 		});
@@ -166,6 +166,7 @@ async function screenshots(dirs = []) {
 			head.append(base);
 		}, baseHref);
 		*/
+		await page.waitForSelector('html', {visible: true});
 		const element = await page.$$("body > *");
 		//await page.screenshot({ path: screenshot, fullPage: true, type: 'png' });
 		await element[0].screenshot({ path: screenshot, type: 'png' });
